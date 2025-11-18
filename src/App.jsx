@@ -5,6 +5,14 @@ import {
   LineChart, Line, PieChart, Pie, Cell, AreaChart, Area
 } from 'recharts';
 
+// ฟังก์ชันสำคัญ: หา Base Path สำหรับเรียกไฟล์รูปภาพใน Production (GitHub Pages)
+const getBasePath = (path) => {
+  // ใน production, Vite จะเพิ่ม Base Path (เช่น /travel-gadgets-2026) ให้อัตโนมัติ
+  // รูปภาพที่อยู่ใน public/ จะถูกอ้างอิงจาก root ของเว็บ
+  // ถ้า path เริ่มด้วย / ให้ตัดทิ้งเพื่อไม่ให้เกิด path ซ้ำ
+  return path.startsWith('/') ? path : `/${path}`; 
+};
+
 function App() {
   // --- State Management ---
   const [currentView, setCurrentView] = useState("store"); 
@@ -46,14 +54,14 @@ function App() {
     setTimeout(() => setShowNotify(false), 2000);
   };
 
-  // --- Data: สินค้า 24 ชิ้น ---
+  // --- Data: สินค้า 24 ชิ้น (เปลี่ยน image path เป็นแค่ชื่อไฟล์) ---
   const products = [
     {
       id: 1,
       name: "MagSafe Powerbank 10k",
       price: 1290,
       originalPrice: 1590,
-      image: "public/images/1-magsafe-powerbank.jpg",
+      image: "images/1-powerbank.jpg", // 👈 เปลี่ยนเป็นไม่มี / นำหน้า
       category: "Charging",
       rating: 4.9,
       reviews: 420,
@@ -65,7 +73,7 @@ function App() {
       name: "GaN Universal Adapter",
       price: 890,
       originalPrice: null,
-      image: "public/images/2-universal-adapter.jpg",
+      image: "images/2-adapter.jpg",
       category: "Charging",
       rating: 4.7,
       reviews: 150,
@@ -77,7 +85,7 @@ function App() {
       name: "AI Translator Earbuds",
       price: 4500,
       originalPrice: 5900,
-      image: "public/images/3-translator-earbuds.jpg",
+      image: "images/3-earbuds.jpg",
       category: "Tech",
       rating: 4.8,
       reviews: 89,
@@ -89,7 +97,7 @@ function App() {
       name: "Global Tracker Tag",
       price: 590,
       originalPrice: null,
-      image: "public/images/4-global-tracker-tag.jpg",
+      image: "images/4-tracker.jpg",
       category: "Safety",
       rating: 4.5,
       reviews: 210,
@@ -101,7 +109,7 @@ function App() {
       name: "Anti-Theft Tech Sling",
       price: 2100,
       originalPrice: 2500,
-      image: "public/images/5-anti-theft.jpg",
+      image: "images/5-sling.jpg",
       category: "Carry",
       rating: 4.8,
       reviews: 56,
@@ -113,7 +121,7 @@ function App() {
       name: "Pocket Gimbal 4K",
       price: 3990,
       originalPrice: null,
-      image: "public/images/6-pocket-gimbal.jpg",
+      image: "images/6-gimbal.jpg",
       category: "Lifestyle",
       rating: 4.9,
       reviews: 112,
@@ -125,7 +133,7 @@ function App() {
       name: "Smart Sleep Mask",
       price: 1490,
       originalPrice: 1890,
-      image: "public/images/7-smart-sleep-mask.jpg",
+      image: "images/7-mask.jpg",
       category: "Lifestyle",
       rating: 4.6,
       reviews: 45,
@@ -137,7 +145,7 @@ function App() {
       name: "Portable Espresso",
       price: 2590,
       originalPrice: null,
-      image: "public/images/8-portable-espresso.jpg",
+      image: "images/8-espresso.jpg",
       category: "Lifestyle",
       rating: 4.7,
       reviews: 67,
@@ -149,7 +157,7 @@ function App() {
       name: "Solar Charger Foldable",
       price: 1890,
       originalPrice: 2200,
-      image: "public/images/9-solar-charger.jpg",
+      image: "images/9-solar.jpg",
       category: "Charging",
       rating: 4.4,
       reviews: 32,
@@ -161,7 +169,7 @@ function App() {
       name: "Compact Iron Steamer",
       price: 990,
       originalPrice: 1290,
-      image: "public/images/10-compact-iron.jpg",
+      image: "images/10-steamer.jpg",
       category: "Carry",
       rating: 4.5,
       reviews: 88,
@@ -173,7 +181,7 @@ function App() {
       name: "Drone Mini Pro",
       price: 8900,
       originalPrice: 10900,
-      image: "public/images/11-drone-mini.jpg",
+      image: "images/11-drone.jpg",
       category: "Tech",
       rating: 4.9,
       reviews: 24,
@@ -185,7 +193,7 @@ function App() {
       name: "UV Sanitizer Wand",
       price: 790,
       originalPrice: null,
-      image: "public/images/12-uv-sanitizer-wand.jpg",
+      image: "images/12-uv.jpg",
       category: "Safety",
       rating: 4.3,
       reviews: 105,
@@ -197,7 +205,7 @@ function App() {
       name: "Noise Cancel Headphones",
       price: 5900,
       originalPrice: 7500,
-      image: "public/images/13-noise-cancel.jpg",
+      image: "images/13-headphone.jpg",
       category: "Tech",
       rating: 4.8,
       reviews: 230,
@@ -209,7 +217,7 @@ function App() {
       name: "Pocket Cinema Projector",
       price: 4200,
       originalPrice: null,
-      image: "public/images/14-pocket-cinema-projector.jpg",
+      image: "images/14-projector.jpg",
       category: "Lifestyle",
       rating: 4.5,
       reviews: 56,
@@ -221,7 +229,7 @@ function App() {
       name: "Digital Luggage Scale",
       price: 390,
       originalPrice: 590,
-      image: "public/images/15-digital-luggage.jpg",
+      image: "images/15-scale.jpg",
       category: "Carry",
       rating: 4.7,
       reviews: 540,
@@ -233,7 +241,7 @@ function App() {
       name: "Smart Passport Wallet",
       price: 1200,
       originalPrice: null,
-      image: "public/images/16-smart-passport-wallet.jpg",
+      image: "images/16-wallet.jpg",
       category: "Safety",
       rating: 4.6,
       reviews: 89,
@@ -245,7 +253,7 @@ function App() {
       name: "GoAction Camera 360",
       price: 9500,
       originalPrice: 11900,
-      image: "public/images/17-go-action-camera.jpg",
+      image: "images/17-camera.jpg",
       category: "Lifestyle",
       rating: 4.9,
       reviews: 77,
@@ -257,7 +265,7 @@ function App() {
       name: "Travel Pillow Memory Foam",
       price: 890,
       originalPrice: null,
-      image: "public/images/18-travel-pillow.jpg",
+      image: "images/18-pillow.jpg",
       category: "Lifestyle",
       rating: 4.4,
       reviews: 312,
@@ -269,7 +277,7 @@ function App() {
       name: "Portable 5G Router",
       price: 3500,
       originalPrice: 4200,
-      image: "public/images/19-portable-5G-router.jpg",
+      image: "images/19-router.jpg",
       category: "Tech",
       rating: 4.7,
       reviews: 65,
@@ -281,7 +289,7 @@ function App() {
       name: "Water Purifier Bottle",
       price: 1590,
       originalPrice: null,
-      image: "public/images/20-water-purifier-bottle.jpg",
+      image: "images/20-bottle.jpg",
       category: "Safety",
       rating: 4.8,
       reviews: 44,
@@ -293,7 +301,7 @@ function App() {
       name: "Tech Cable Organizer",
       price: 490,
       originalPrice: 690,
-      image: "public/images/21-cable-organizer.jpg",
+      image: "images/21-organizer.jpg",
       category: "Carry",
       rating: 4.5,
       reviews: 190,
@@ -305,7 +313,7 @@ function App() {
       name: "Power Strip Cube",
       price: 650,
       originalPrice: null,
-      image: "public/images/22-power-strip-cube.jpg",
+      image: "images/22-cube.jpg",
       category: "Charging",
       rating: 4.6,
       reviews: 120,
@@ -317,7 +325,7 @@ function App() {
       name: "Shoe Bags Set (3pcs)",
       price: 350,
       originalPrice: null,
-      image: "public/images/23-shoe-bags-set.jpg",
+      image: "images/23-shoe.jpg",
       category: "Carry",
       rating: 4.3,
       reviews: 250,
@@ -329,7 +337,7 @@ function App() {
       name: "Smartphone Lens Kit",
       price: 990,
       originalPrice: 1490,
-      image: "public/images/24-smartphone-lens-kit.jpg",
+      image: "images/24-lens.jpg",
       category: "Lifestyle",
       rating: 4.2,
       reviews: 68,
@@ -447,10 +455,11 @@ function App() {
               {filteredProducts.map((item) => (
                 <div key={item.id} className="group bg-white rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-slate-100 overflow-hidden flex flex-col relative">
                   
-                  {/* Image Area */}
+                  {/* Image Area (ใช้ <img> ที่เรียก Base Path ถูกต้อง) */}
                   <div className="h-56 bg-slate-50 flex items-center justify-center relative overflow-hidden">
                     <img 
-                      src={item.image} 
+                      // 💡 จุดที่แก้ไข: ใช้ getBasePath() เพื่อให้รูปภาพแสดงผลบน GitHub Pages
+                      src={getBasePath(item.image)} 
                       alt={item.name}
                       className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                     />
