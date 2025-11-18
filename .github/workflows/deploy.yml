@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy Travel Gadgets (Final)
 
 on:
   push:
@@ -6,28 +6,47 @@ on:
       - main
   workflow_dispatch:
 
+# กำหนดสิทธิ์: จำเป็นสำหรับ GitHub Actions ในการ Deploy ไปยัง Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
+      - name: Checkout Repository 🛎️
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 
+      - name: Setup Node.js 🚀
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # ใช้ Node.js version 20
+          node-version: 20
+          cache: 'npm' # แคช dependencies เพื่อให้รันเร็วขึ้น
 
       - name: Install dependencies 🔧
         run: npm install
 
-      - name: Build project 🏗️
+      - name: Build project (Vite) 🏗️
         run: npm run build
+        # Base path ถูกตั้งค่าไว้ใน vite.config.js แล้ว
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Setup Pages ⚙️
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact 📦
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          # base_url สำหรับ Vite
-          enable_jekyll: true
+          path: './dist' # โฟลเดอร์ที่ Vite สร้างไฟล์ Build เสร็จแล้ว
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages 🌐
+        id: deployment
+        uses: actions/deploy-pages@v4
