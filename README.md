@@ -19,9 +19,9 @@ Styling: Tailwind CSS (Emphasizes speed and Minimalist style)
 Data Visualization: Recharts (Used for creating dashboard charts)
 Deployment: GitHub Pages & GitHub Actions (Automated CI/CD)
 
-💡 How to Run LocallyIf you wish to clone this project to run on your local machine for code review:
+💡 How to Run Locally If you wish to clone this project to run on your local machine for code review:
 1. Clone Repository:
-git clone [https://github.com/PraneeP/travel-gadgets-2026.git](https://github.com/PraneeP/travel-gadgets-2026.git)cd travel-gadgets-2026
+git clone [https://github.com/PraneeP/travel-gadgets-2026.git]https://github.com/PraneeP/travel-gadgets-2026.gitcd travel-gadgets-2026
 2. Install Dependencies:
 npm install
 3. Run Development Server:
