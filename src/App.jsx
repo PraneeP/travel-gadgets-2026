@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
 // Import กราฟจาก Recharts
 import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  LineChart, Line, PieChart, Pie, Cell, AreaChart, Area
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  AreaChart, Area, PieChart, Pie, Cell, Legend
 } from 'recharts';
 
-// ฟังก์ชันสำคัญ: หา Base Path สำหรับเรียกไฟล์รูปภาพใน Production (GitHub Pages)
-const getBasePath = (path) => {
-  // ใน production, Vite จะเพิ่ม Base Path (เช่น /travel-gadgets-2026) ให้อัตโนมัติ
-  // รูปภาพที่อยู่ใน public/ จะถูกอ้างอิงจาก root ของเว็บ
-  // ถ้า path เริ่มด้วย / ให้ตัดทิ้งเพื่อไม่ให้เกิด path ซ้ำ
-  return path.startsWith('/') ? path : `/${path}`; 
+// ฟังก์ชันสำหรับรวม BASE_URL เข้ากับ Path รูปภาพ (มั่นคงที่สุด)
+const combinePath = (path) => {
+  // BASE_URL จะถูกตั้งค่าเป็น /travel-gadgets-2026/ โดย Vite
+  return `${import.meta.env.BASE_URL}${path}`;
 };
 
 function App() {
@@ -54,14 +52,14 @@ function App() {
     setTimeout(() => setShowNotify(false), 2000);
   };
 
-  // --- Data: สินค้า 24 ชิ้น (เปลี่ยน image path เป็นแค่ชื่อไฟล์) ---
+  // --- Data: สินค้า 24 ชิ้น (ใช้ Path ที่ถูกต้องสำหรับ Public Folder) ---
   const products = [
     {
       id: 1,
       name: "MagSafe Powerbank 10k",
       price: 1290,
       originalPrice: 1590,
-      image: "images/1-powerbank.jpg", // 👈 เปลี่ยนเป็นไม่มี / นำหน้า
+      image: "images/1-powerbank.jpg", 
       category: "Charging",
       rating: 4.9,
       reviews: 420,
@@ -455,11 +453,11 @@ function App() {
               {filteredProducts.map((item) => (
                 <div key={item.id} className="group bg-white rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-slate-100 overflow-hidden flex flex-col relative">
                   
-                  {/* Image Area (ใช้ <img> ที่เรียก Base Path ถูกต้อง) */}
+                  {/* Image Area */}
                   <div className="h-56 bg-slate-50 flex items-center justify-center relative overflow-hidden">
                     <img 
-                      // 💡 จุดที่แก้ไข: ใช้ getBasePath() เพื่อให้รูปภาพแสดงผลบน GitHub Pages
-                      src={getBasePath(item.image)} 
+                      // 💡 การเรียกรูปภาพที่ถูกต้องสำหรับ Vite + GitHub Pages
+                      src={`${import.meta.env.BASE_URL}${item.image}`} 
                       alt={item.name}
                       className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                     />
